@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import './ColorBox.scss';
 
-ColorBox.propTypes = {
+// ColorBox.propTypes = {
 
-};
+// };
 // Do độc lập vs component hiện tại nên có thể viết bên ngoài
 // có thể tách ra 1 file
 function getRandomColor() {
@@ -16,7 +16,7 @@ function getRandomColor() {
 function ColorBox() {
     // lấy giá trị từ localStorage làm initialState thay vi set deeppink
     //const [color, setColor] = useState('deeppink');
-    const initColor = localStorage.getItem('box-color') || 'deeppink';
+    //const initColor = localStorage.getItem('box-color') || 'deeppink';
     const [color, setColor] = useState(() => {
         const initColor = localStorage.getItem('box-color') || 'deeppink';
 
