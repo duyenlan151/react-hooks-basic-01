@@ -4,6 +4,7 @@ import './App.scss';
 import Pagination from './components/Pagination';
 // import ColorBox from './components/ColorBox';
 import PostList from './components/PostList';
+import PostFilterForm from './components/PostFiltersForm';
 // import TodoForm from './components/TodoForm';
 // import TodoList from './components/TodoList';
 
@@ -27,6 +28,7 @@ function App() {
   const [filters, setFilters] = useState({
     _limit: 10,
     _page: 1,
+    title_like: '',
   });
 
   // không dùng async cho useEffect tru truong hop custom hook
@@ -86,6 +88,16 @@ function App() {
     newTodoList.push(newTodo);
     setTodoList(newTodoList);
   }
+
+  // 09 search
+  function handleFilterChange(newFilters) {
+    console.log(newFilters);
+    setFilters({
+      ...filters,
+      _page: 1,
+      title_like: newFilters.searchTerm
+    })
+  }
   return (
     <div className="App">
       <h1>Welcome to React Hooks!</h1>
@@ -95,7 +107,9 @@ function App() {
         todos={todoList}
         onTodoClick={handleTodoClick}
       /> */}
-
+      <PostFilterForm
+        onSubmit={handleFilterChange}
+      />
       <PostList posts={postList} />
       <Pagination
         pagination={pagination}
