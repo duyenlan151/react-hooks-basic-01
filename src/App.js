@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import queryString from 'query-string';
 import './App.scss';
+import Pagination from './components/Pagination';
 // import ColorBox from './components/ColorBox';
 import PostList from './components/PostList';
 // import TodoForm from './components/TodoForm';
@@ -14,7 +16,18 @@ function App() {
 
   // 07 useEffect
   const [postList, setPostList] = useState([]);
+  // 08 pagination
+  const [pagination, setPagination] = useState({
+    _page: 1,
+    _limit: 10,
+    _totalRows: 11,
+  });
 
+  // set fliters when limit or page change
+  const [filters, setFilters] = useState({
+    _limit: 10,
+    _page: 1,
+  });
 
   // không dùng async cho useEffect tru truong hop custom hook
   // khong dung useEffect(async() => ...)
@@ -22,25 +35,35 @@ function App() {
     async function fetchPostList() {
       // ... goi api nen dung try catch de tranh loi xay ra
       try {
-        const requestUrl = 'http://js-post-api.herokuapp.com/api/posts?_limit=10&_page=1';
+        // _limit=10&_page=1
+        const paramsString = queryString.stringify(filters);
+        const requestUrl = `http://js-post-api.herokuapp.com/api/posts?${paramsString}`;
         const response = await fetch(requestUrl);
         const responseJSON = await response.json();
-        console.log({ responseJSON });
-
-        const { data } = responseJSON;
+        //console.log({ responseJSON });
+        const { data, pagination } = responseJSON;
         setPostList(data);
+        setPagination(pagination)
       } catch (error) {
         console.log('Failed to fetch post list');
       }
     }
     console.log('POST list effect');
     fetchPostList();
-  }, []);// empty array chi chay dung 1 lan, khong bi phu thuoc 
+  }, [filters]);// empty array chi chay dung 1 lan, khong bi phu thuoc 
 
 
   useEffect(() => {
     console.log('TODO list effect');
   })// không có dependencies khi sau mỗi lần render sẽ chạy lại
+
+  function handlePageChane(newPage) {
+    console.log(newPage);
+    setFilters({
+      ...filters,
+      _page: newPage
+    })
+  }
 
 
   function handleTodoClick(todo) {
@@ -74,6 +97,10 @@ function App() {
       /> */}
 
       <PostList posts={postList} />
+      <Pagination
+        pagination={pagination}
+        onPageChange={handlePageChane}
+      />
     </div>
   );
 }
